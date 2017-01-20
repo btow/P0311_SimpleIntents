@@ -6,9 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    EditText etUri;
     Button btnWeb, btnMap, btnCall;
 
     @Override
@@ -16,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        etUri = (EditText) findViewById(R.id.etUri);
         btnWeb = (Button) findViewById(R.id.btnWeb);
         btnMap = (Button) findViewById(R.id.btnMap);
         btnCall = (Button) findViewById(R.id.btnCall);
@@ -27,21 +31,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+
+        String parsedText = etUri.getText().toString();
+        if (parsedText.equals("")) {
+            Toast.makeText(this, "The datas string is empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent;
         switch (v.getId()) {
             case R.id.btnWeb :
-                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://developer.android.com"));
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + parsedText));
                 startActivity(intent);
                 break;
             case R.id.btnMap :
                 intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("geo:-0.45609946,-90.26607513"));
+                intent.setData(Uri.parse("geo:" + parsedText));
                 startActivity(intent);
                 break;
             case R.id.btnCall :
                 intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:+79226192777"));
+                intent.setData(Uri.parse("tel:" + parsedText));
                 startActivity(intent);
                 break;
         }
